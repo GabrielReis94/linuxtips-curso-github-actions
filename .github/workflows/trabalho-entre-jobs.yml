@@ -29,7 +29,7 @@ jobs:
       - name: Listando qualquer coisa dentro do diretorio  
         run: ls -lrt
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: strigus
           path: ${{github.workspace}}/mensagem.txt
