@@ -32,7 +32,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: strigus
-          path: ${{github.workspace}}/mensagem.txt
+          path: mensagem.txt
 
       - name: ver conteudo do diretorio
         run: ls -lha && ls ./strigus/
