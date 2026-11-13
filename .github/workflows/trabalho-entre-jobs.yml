@@ -34,7 +34,7 @@ jobs:
           name: strigus
           path: ${{github.workspace}}/mensagem.txt
 
-      - name: ver conteudo do arquivo
+      - name: ver conteudo do diretorio
         run: ls -lha && ls ./strigus/
 
       - name: acessar  o conteudo do arquivo   
