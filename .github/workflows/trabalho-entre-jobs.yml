@@ -15,13 +15,29 @@ jobs:
 
 
       - name: Exibir uma mensagem
-        run: echo " Estou fazendo curso de Github ections na Linuxtips" > mensagem.txt
+        run: echo " Estou fazendo curso de Github ections na Linuxtips" > ${{github.workspace}}/mensagem.txt
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: strigus
+          path: ${{github.workspace}}/mensagem.txt
 
   job_2:
     runs-on: ubuntu-latest
     steps:
       - name: Listando qualquer coisa dentro do diretorio  
         run: ls -lrt
-      
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: strigus
+          path: ${{github.workspace}}/mensagem.txt
+
+      - name: ver conteudo do arquivo
+        run: ls -lha && ls ./strigus/
+
+      - name: acessar  o conteudo do arquivo   
+        run: mv stringus/mensagem.txt . && rm  -f /strigus
+        
       - name: Le conteudo do arquivo
         run: cat mensagem.txt
