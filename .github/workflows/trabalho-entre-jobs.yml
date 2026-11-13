@@ -27,18 +27,18 @@ jobs:
     needs: job_1
     steps:
       - name: Listando qualquer coisa dentro do diretorio  
-        run: ls -lrt
+        run: ls -lha
 
       - uses: actions/download-artifact@v4
         with:
           name: strigus
-          path: mensagem.txt
+          path: strigus
 
       - name: ver conteudo do diretorio
         run: ls -lha && ls ./strigus/
 
       - name: acessar  o conteudo do arquivo   
-        run: mv stringus/mensagem.txt . && rm  -f /strigus
+        run: mv strigus/mensagem.txt . && rm  -f ./strigus
 
       - name: Le conteudo do arquivo
         run: cat mensagem.txt
