@@ -1,4 +1,4 @@
-name: Primeiro Workflow Linuxtips
+name: Vendo arquivos compartilhados entre steps
 
 
 on:
@@ -7,7 +7,7 @@ on:
        - main
 
 jobs:
-  giropops:
+  entre_steps:
     runs-on: ubuntu-latest
     steps:
       - name: Confere versão do Ubuntu
