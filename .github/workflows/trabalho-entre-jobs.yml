@@ -17,7 +17,7 @@ jobs:
       - name: Exibir uma mensagem
         run: echo " Estou fazendo curso de Github ections na Linuxtips" > ${{github.workspace}}/mensagem.txt
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: strigus
           path: ${{github.workspace}}/mensagem.txt
