@@ -15,7 +15,7 @@ jobs:
 
 
       - name: Exibir uma mensagem
-        run: echo " Estou fazendo curso de Github ections na Linuxtips"
+        run: echo " Estou fazendo curso de Github ections na Linuxtips" > mensagem.txt
 
       - name: Listando qualquer coisa dentro do diretorio  
         run: ls -lrt
