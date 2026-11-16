@@ -1,0 +1,40 @@
+name: Desafio 1 - Scan de Imagem com Trivy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'alpine:latest'
+        required: true
+        default: 'alpine:latest'
+        type: string
+
+jobs:
+  scan-image:
+    name: Pull e Scan da Imagem
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1 - Fazer o pull da imagem que foi passada no input
+      - name: 1 - Pull da imagem
+        run: |
+          echo "Fazendo pull da imagem: ${{ inputs.image }}"
+          docker pull ${{ inputs.image }}
+
+      # Step 2 - Provar que a imagem realmente foi baixada e está disponível
+      - name: 2 - Listar imagens disponíveis
+        run: |
+          echo "Imagens disponíveis no runner:"
+          docker images
+          echo "---"
+          echo "Verificando especificamente a imagem escolhida:"
+          docker images ${{ inputs.image }}
+
+      # Step 3 - Usar a action compartilhada do Trivy para gerar o relatório
+      - name: 3 - Scan de vulnerabilidades com Trivy
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: ${{ inputs.image }}
+          format: 'table'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+          exit-code: '0'
