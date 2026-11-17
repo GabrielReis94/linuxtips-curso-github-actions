@@ -26,18 +26,18 @@ jobs:
       # Step 1 - baixar imagem do container
       - name: baixar imagem do container
         run: |
-          docker pull ${{ github.event.inputs.validaImagemDocker }}
+          docker pull ${{ github.event.inputs.image }}
 
       # Step 2 - Provar que a imagem realmente foi baixada e está disponível
       - name: Leitura da imagem
         run: |
-          IMAGE_NAME=$(echo "${{ github.event.inputs.validaImagemDocker }}" | cut -d ':' -f 1)
+          IMAGE_NAME=$(echo "${{ github.event.inputs.image }}" | cut -d ':' -f 1)
           docker images | grep $IMAGE_NAME}
 
-      # Step 3 - Usar a action compartilhada do Trivy para gerar o relatório
+      # Step 3 -  relatório
       - name: Scan com o Docker Scout
         uses: docker/scout-action@v1
         with:
           command: quickview,cves,recommendations,sbom
-          image: ${{ github.event.inputs.validaImagemDocker }}
+          image: ${{ github.event.inputs.image }}
           only-severities: critical,high
