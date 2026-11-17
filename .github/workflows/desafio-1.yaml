@@ -1,4 +1,4 @@
-name: Desafio 1 - Scan de Imagem com Trivy
+name: Validacao de Imagens de Container
 
 on:
   workflow_dispatch:
