@@ -6,7 +6,7 @@ on:
       image:
         description: 'alpine:latest'
         required: true
-        default: 'alpine:latest'
+        default: 'nginx:latest'
         type: string
 
 jobs:
