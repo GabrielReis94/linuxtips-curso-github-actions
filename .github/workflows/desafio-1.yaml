@@ -20,8 +20,8 @@ jobs:
       - name: login docker hub
         uses: docker/login-action@v3
         with:
-          username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Step 1 - baixar imagem do container
       - name: baixar imagem do container
