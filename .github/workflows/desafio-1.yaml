@@ -12,6 +12,8 @@ on:
 jobs:
   pipeline-seguranca:
     runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image || 'nginx:latest' }}
 
     steps:
       - name: Checkout do repositório
@@ -26,18 +28,18 @@ jobs:
       # Step 1 - baixar imagem do container
       - name: baixar imagem do container
         run: |
-          docker pull ${{ github.event.inputs.image }}
+          docker pull "$IMAGE"
 
       # Step 2 - Provar que a imagem realmente foi baixada e está disponível
       - name: Leitura da imagem
         run: |
-          IMAGE_NAME=$(echo "${{ github.event.inputs.image }}" | cut -d ':' -f 1)
-          docker images | grep $IMAGE_NAME}
+          IMAGE_NAME=$(echo "$IMAGE" | cut -d ':' -f 1)
+          docker images | grep "$IMAGE_NAME"
 
       # Step 3 -  relatório
       - name: Scan com o Docker Scout
         uses: docker/scout-action@v1
         with:
           command: quickview,cves,recommendations,sbom
-          image: ${{ github.event.inputs.image }}
+          image: ${{ env.IMAGE }}
           only-severities: critical,high
