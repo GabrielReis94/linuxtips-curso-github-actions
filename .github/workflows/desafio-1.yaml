@@ -1,4 +1,4 @@
-name: Desafio 1 - Scan de Imagem com Trivy
+name: Validacao de Imagens de Container
 
 on:
   workflow_dispatch:
@@ -6,35 +6,50 @@ on:
       image:
         description: 'alpine:latest'
         required: true
-        default: 'alpine:latest'
+        default: 'nginx:latest'
         type: string
 
 jobs:
-  scan-image:
-    name: Pull e Scan da Imagem
+  pipeline-seguranca:
     runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image || 'nginx:latest' }}
 
     steps:
-      # Step 1 - Fazer o pull da imagem que foi passada no input
-      - name: 1 - Pull da imagem
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: login docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 1 - baixar imagem do container
+      - name: baixar imagem do container
         run: |
-          echo "Fazendo pull da imagem: ${{ inputs.image }}"
-          docker pull ${{ inputs.image }}
+          docker pull "$IMAGE"
 
       # Step 2 - Provar que a imagem realmente foi baixada e está disponível
-      - name: 2 - Listar imagens disponíveis
+      - name: Leitura da imagem
         run: |
-          echo "Imagens disponíveis no runner:"
-          docker images
-          echo "---"
-          echo "Verificando especificamente a imagem escolhida:"
-          docker images ${{ inputs.image }}
+          IMAGE_NAME=$(echo "$IMAGE" | cut -d ':' -f 1)
+          docker images | grep "$IMAGE_NAME"
 
-      # Step 3 - Usar a action compartilhada do Trivy para gerar o relatório
-      - name: 3 - Scan de vulnerabilidades com Trivy
-        uses: aquasecurity/trivy-action@v0.36.0
+      # Step 3 -  relatório
+      - name: Scan com o Docker Scout
+        uses: docker/scout-action@v1
         with:
-          image-ref: ${{ inputs.image }}
-          format: 'table'
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-          exit-code: '0'
+          command: quickview,cves,sbom
+          image: ${{ env.IMAGE }}
+          only-severities: critical,high
+
+      # Step 4 - recomendações de imagem base
+      # Fica em um step separado porque a scout-action pode dar panic quando
+      # não encontra recomendação para a imagem base (ex.: nginx:latest).
+      - name: Recomendações do Docker Scout
+        uses: docker/scout-action@v1
+        continue-on-error: true
+        with:
+          command: recommendations
+          image: ${{ env.IMAGE }}
