@@ -1,0 +1,11 @@
+name: Testando trigger do tipo delete
+
+on:
+  delete
+
+jobs:
+      print-branch-or-tag-deletion:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Aviso sobre exclusão de branch ou tag
+            run: echo "Este workflow foi triggado pois um branch ou tag foi excluído"
