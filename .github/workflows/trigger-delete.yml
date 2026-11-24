@@ -9,3 +9,5 @@ jobs:
         steps:
           - name: Aviso sobre exclusão de branch ou tag
             run: echo "Este workflow foi triggado pois um branch ou tag foi excluído"
+
+ 
