@@ -9,4 +9,4 @@ jobs:
         runs-on: ubuntu-latest
         steps:
           - name: Avisa sobre a modificação
-            run: acho "Este workflow foi triggado pois um regra de branch protection rule foi alterada"
+            run: echo "Este workflow foi triggado pois um regra de branch protection rule foi alterada"
