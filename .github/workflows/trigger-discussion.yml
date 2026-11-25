@@ -1,0 +1,13 @@
+name: Criando nosso trigger discussion
+
+on:
+  discussion:
+    types: [created, edited, deleted ]
+
+jobs:
+    job-deployment:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Printa Deployment
+          run: echo "Esse job foi triggado por uma discussão criada, editada ou deletada"
+
