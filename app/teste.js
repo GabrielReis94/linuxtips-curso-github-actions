@@ -2,3 +2,5 @@ TextEncoderStream
 
 
 TextDecoder
+
+TextDecoderStream
