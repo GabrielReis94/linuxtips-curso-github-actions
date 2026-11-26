@@ -1,0 +1,55 @@
+name: Validacao de Imagens de Container
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'alpine:latest'
+        required: true
+        default: 'nginx:latest'
+        type: string
+
+jobs:
+  pipeline-seguranca:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ inputs.image || 'nginx:latest' }}
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: login docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 1 - baixar imagem do container
+      - name: baixar imagem do container
+        run: |
+          docker pull "$IMAGE"
+
+      # Step 2 - Provar que a imagem realmente foi baixada e está disponível
+      - name: Leitura da imagem
+        run: |
+          IMAGE_NAME=$(echo "$IMAGE" | cut -d ':' -f 1)
+          docker images | grep "$IMAGE_NAME"
+
+      # Step 3 -  relatório
+      - name: Scan com o Docker Scout
+        uses: docker/scout-action@v1
+        with:
+          command: quickview,cves,sbom
+          image: ${{ env.IMAGE }}
+          only-severities: critical,high
+
+      # Step 4 - recomendações de imagem base
+      # Fica em um step separado porque a scout-action pode dar panic quando
+      # não encontra recomendação para a imagem base (ex.: nginx:latest).
+      - name: Recomendações do Docker Scout
+        uses: docker/scout-action@v1
+        continue-on-error: true
+        with:
+          command: recommendations
+          image: ${{ env.IMAGE }}
