@@ -1,0 +1,11 @@
+name: Testando trigger do tipo create
+
+on:
+  create
+
+jobs:
+      print-branch-or-tag-creation:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Aviso sobre criação de branch ou tag
+            run: echo "Este workflow foi triggado pois um branch ou tag foi criado"
