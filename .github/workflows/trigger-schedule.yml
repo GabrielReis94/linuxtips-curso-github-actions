@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: 59 0 * * 4 # <--- Cron Fixo
     - cron: '*/5 * * * 4'
-    - cron: '55 1 * * 5' # <--- Cron Fixo (22:55 Brasília)
+    - cron: '5 2 * * 5' # <--- Cron Fixo (23:05 Brasília / 02:05 UTC)
     - cron: '*/5 * * * 5'
 
 jobs:
@@ -12,9 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Informa Horário Específico com Cron Fixo
-        if: ${{ github.event.schedule == '59 0 * * 4' || github.event.schedule == '55 1 * * 5' }}
+        if: ${{ github.event.schedule == '59 0 * * 4' || github.event.schedule == '5 2 * * 5' }}
         run: echo "Executado no horário fixo agendado"
-      
+
       - name: Informa Horário Específico com Cron Dinâmico
-        if: ${{ github.event.schedule == '55 1 * * 5' || github.event.schedule == '*/5 * * * 5' }}
+        if: ${{ github.event.schedule == '*/5 * * * 4' || github.event.schedule == '*/5 * * * 5' }}
         run: echo "Executado no horário dinâmico agendado"
+
+      - name: Informa Horário
+        run: echo "Cron que disparou = ${{ github.event.schedule }} - agora são $(date) UTC"
