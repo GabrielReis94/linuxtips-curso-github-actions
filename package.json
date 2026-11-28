@@ -1,0 +1,12 @@
+{
+  "name": "linuxtips-curso-github-actions",
+  "version": "1.0.0",
+  "description": "Projeto de exemplo para o desafio de GitHub Actions",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo \"Build executado com sucesso\"",
+    "test": "node -e \"console.log('Testes executados com sucesso'); process.exit(0)\""
+  },
+  "author": "",
+  "license": "MIT"
+}
