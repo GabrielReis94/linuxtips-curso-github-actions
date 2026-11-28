@@ -1,0 +1,18 @@
+name: Workflow de build e testes
+
+on: 
+   workflow_call:
+     inputs:
+       resultado-do-build-recebido:
+         required: true
+         type: string
+
+jobs:
+  build-e-testes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install npm
+        run: npm install ${{ github.event.inputs.resultado-do-build-enviado }}
+
+      - name: Informa o resultado do build
+        run: echo "O resultado do build é ${{ inputs.resultado-do-build-recebido }}"

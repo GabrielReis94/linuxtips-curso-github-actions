@@ -1,0 +1,21 @@
+name: Workflow de Validação do Ambiente
+
+on:
+  workflow_dispatch:
+    inputs:
+      resultado-do-build-enviado:
+        required: true
+        type: choice
+        options:
+          - "sucesso"
+          - "falha"
+
+
+jobs:
+  valida-ambiente:
+    runs-on: ubuntu-latest
+    steps:
+      - name: valida se os teste foram executados com sucesso
+        uses: ./.github/workflows/build-e-testes.yml
+        with:
+          resultado-do-build-recebido: ${{ inputs.resultado-do-build-enviado }}
