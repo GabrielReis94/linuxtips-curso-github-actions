@@ -3,7 +3,7 @@ name: Workflow de Validação do Ambiente
 on:
   workflow_dispatch:
     inputs:
-      resultado-do-build-enviado:
+      node-version:
         required: true
         type: choice
         options:
@@ -15,7 +15,11 @@ jobs:
   valida-ambiente:
     runs-on: ubuntu-latest
     steps:
-      - name: valida se os teste foram executados com sucesso
-        uses: ./.github/workflows/build-e-testes.yml
-        with:
-          resultado-do-build-recebido: ${{ inputs.resultado-do-build-enviado }}
+      - name: Mostra o ambiente escolhido
+        run: echo "Node ${{ inputs.node-version }} na branch ${{ github.ref_name }}"
+
+  build-e-testes:
+    needs: valida-ambiente                         # só roda se a validação passar
+    uses: ./.github/workflows/build-e-testes.yml   # uses no nível do JOB
+    with:
+      node-version: ${{ inputs.node-version }}

@@ -1,0 +1,13 @@
+name: Workflow de Publicação
+
+on:
+  workflow_run:
+    workflows: ["Workflow de Validação do Ambiente"]   # igual ao name: do workflow 1
+    types: [completed]
+
+jobs:
+  publica:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Testes passaram, publicando..."
